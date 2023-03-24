@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String   @id
+  fname             String
+  lname             String
+  avatar_url        String
+  registration_date DateTime
+  phone             String
+  birthday          String
+  password          String
+  Order             Order[]
+}
+
+model Ticket {
+  id             String   @id
+  from_location  String
+  to_location    String
+  arrival_date   DateTime
+  departure_date DateTime
+  unit_price     Float
+  count          Int
+  Order          Order[]
+}
+
+model Order {
+  id                String   @id
+  Ticket            Ticket   @relation(fields: [ticket_id], references: [id])
+  ticket_id         String
+  User              User     @relation(fields: [user_id], references: [id])
+  user_id           String
+  count             Int
+  total_price       Float
+  status            Status
+  registration_date DateTime
+}
+
+enum Status {
+  paid
+  canceled
+  reserved
+}
