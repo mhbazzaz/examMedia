@@ -12,10 +12,10 @@ router.delete("/api/v1/ticket/:id", ticketController.delete);
 router.delete("/api/v1/ticket", ticketController.deleteMany);
 router.get("/api/v1/ticket/", ticketController.getAll);
 router.get("/api/v1/ticket/:id", ticketController.getTicket);
-router.post(
-  "/api/v1/ticket/query?from=&to=&arrival=&departure=",
-  ticketController
-);
-router.get("/api/v1/ticket/query/:id", ticketController);
+// router.post(
+//   "/api/v1/ticket/query?from=&to=&arrival=&departure=",
+//   ticketController
+// );
+// router.get("/api/v1/ticket/query/:id", ticketController);
 
 module.exports = router;

@@ -40,7 +40,7 @@ const orderController = {
   async canceled(req, res) {
     try {
       const { id, status } = req.params;
-      const canceled = await ticketService.cancel(parseInt(id), status);
+      const canceled = await orderService.cancel(parseInt(id), status);
       res.status(205).json(canceled);
     } catch (error) {
       res.status(400).json({

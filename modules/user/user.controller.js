@@ -1,4 +1,3 @@
-const { getUserByPhoneNumber } = require("./user.service");
 const userService = require("./user.service");
 
 const userControl = {

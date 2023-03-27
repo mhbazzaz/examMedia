@@ -1,7 +1,6 @@
 const db = require("../../db");
 
 const ticketService = {
-  // authenticate: async (phone, password) => {},
   
   getTicketById: async (id) => {
     return await db.ticket.findUnique({

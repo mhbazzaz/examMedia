@@ -11,9 +11,9 @@ router.patch("/api/v1/user:id", userController.updated);
 router.delete("/api/v1/user:id", userController.delete);
 router.get("/api/v1/user:id", userController.getUser);
 router.head("/api/v1/user:phone", userController.getUserByPhoneNumber);
-router.get("/api/v1/user/order", userController);
-router.post("/api/v1/user/wallet", userController);
-router.get("/api/v1/user/wallet", userController);
+// router.get("/api/v1/user/order", userController);
+// router.post("/api/v1/user/wallet", userController);
+// router.get("/api/v1/user/wallet", userController);
 
 
 

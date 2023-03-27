@@ -3,7 +3,7 @@ const db = require("../../db");
 const { exclude } = require("../../utils/prisma.util");
 
 const orderService = {
-  getOrderById: async (rentId) => {
+  getOrderById: async (orderId) => {
     const order = await db.order.findUnique({
       where: {
         id: parseInt(orderId),
