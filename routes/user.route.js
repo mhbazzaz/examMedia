@@ -6,8 +6,8 @@ const { userValidator } = require("../validators");
 const { tokenAuthentication } = require("../middlewares/auth");
 const router = express.Router();
 
-router.post("/api/v1/user", userController.create);
-router.patch("/api/v1/user:id", userController.update);
+router.post("/api/v1/user", userController.register);
+router.patch("/api/v1/user:id", userController.updated);
 router.delete("/api/v1/user:id", userController.delete);
 router.get("/api/v1/user:id", userController.getUser);
 router.head("/api/v1/user:phone", userController.getUserByPhoneNumber);
