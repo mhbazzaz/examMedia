@@ -28,8 +28,8 @@ const userControl = {
   },
   async getAll(req, res) {
     try {
-      const all = await userService.getAll();
-      res.status(200).json(all);
+      const allUser = await userService.getAll();
+      res.status(200).json(allUser);
     } catch (error) {
       res.status(403).json({
         error: true,
@@ -74,4 +74,6 @@ const userControl = {
     }
   },
 };
+
+
 module.exports = userControl;

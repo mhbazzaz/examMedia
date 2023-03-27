@@ -1,10 +1,13 @@
 const db = require("../../db");
 
 const userService = {
-  authenticate: async (phone, password) => {},
-  getUserByPhoneNumber: async function (phone) {
-    const user = await this.getByPhone(phone);
-    return user;
+  // authenticate: async (phone, password) => {},
+  getUserByPhoneNumber: async (phone) => {
+    return await db.user.findUnique({
+      where: {
+        phone,
+      },
+    });
   },
   getUserById: async (id) => {
     return await db.user.findUnique({
