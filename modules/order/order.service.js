@@ -28,7 +28,9 @@ const orderService = {
             id: ticketId,
           },
           data: {
-            count: count - 1,
+            count: {
+              decrement: order.count,
+            },
           },
         }),
       ]);
@@ -38,13 +40,13 @@ const orderService = {
       throw new Error(error.message);
     }
   },
-  update: async (id, data) => {
+  update: async (id, orderObj) => {
     try {
-      const result = await db.order.update({
+      const updated = await db.order.update({
         where: { id: parseInt(id) },
-        data: data,
+        data: orderObj,
       });
-      return result;
+      return updated;
     } catch (error) {
       console.log(error.message);
       throw new Error(error.message);
@@ -52,11 +54,13 @@ const orderService = {
   },
   cancel: async (id, status) => {
     try {
-      const result = await db.order.update({
-        where: { id: parseInt(id) },
-        status: status,
+      const canceled = await db.order.update({
+        where: {
+          id: parseInt(id),
+        },
+        status: status.canceled,
       });
-      return result;
+      return canceled;
     } catch (error) {
       console.log(error.message);
       throw new Error(error.message);
@@ -65,8 +69,10 @@ const orderService = {
   pay: async (id, status) => {
     try {
       const result = await db.order.update({
-        where: { id: parseInt(id) },
-        status: status,
+        where: {
+          id: parseInt(id),
+        },
+        status: status.paid,
       });
       return result;
     } catch (error) {

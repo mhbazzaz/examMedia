@@ -14,21 +14,21 @@ const ticketService = {
     return await db.ticket.findMany();
   },
 
-  create: async (data) => {
+  create: async (ticketObj) => {
     try {
       const ticket = await db.ticket.create({
-        data: data,
+        data: ticketObj,
       });
       return ticket.id;
     } catch (error) {
       throw new Error(error.message);
     }
   },
-  update: async (id, data) => {
+  update: async (id, ticketObj) => {
     try {
       const result = await db.ticket.update({
         where: { id: parseInt(id) },
-        data: data,
+        data: ticketObj,
       });
       return result;
     } catch (error) {

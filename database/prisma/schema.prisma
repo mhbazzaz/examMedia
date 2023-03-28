@@ -11,13 +11,14 @@ model User {
   id                Int           @id @default(autoincrement())
   fname             String
   lname             String
-  avatar_url        String
+  avatar_url        String?
   registration_date DateTime      @default(now())
-  phone             String
+  phone             String        @unique
   birthday          String
   password          String
+  role              Role          @default(client)
   Order             Order[]
-  wallet            Transaction[]
+  Transactions      Transaction[]
 }
 
 model Ticket {
@@ -32,26 +33,31 @@ model Ticket {
 }
 
 model Order {
-  id                Int      @id @default(autoincrement())
-  Ticket            Ticket   @relation(fields: [ticket_id], references: [id])
+  id                Int           @id @default(autoincrement())
+  Ticket            Ticket        @relation(fields: [ticket_id], references: [id])
   ticket_id         Int
-  User              User     @relation(fields: [user_id], references: [id])
+  User              User          @relation(fields: [user_id], references: [id])
   user_id           Int
   count             Int
   total_price       Float
   status            Status
-  registration_date DateTime @default(now())
+  registration_date DateTime      @default(now())
 }
 
 model Transaction {
-  id      Int   @id @default(autoincrement())
-  User    User  @relation(fields: [user_id], references: [id])
+  id      Int     @id @default(autoincrement())
+  User    User    @relation(fields: [user_id], references: [id])
   user_id Int
-  wallet  Float @default(0)
+  amount  Float   @default(0)
 }
 
 enum Status {
   paid
   canceled
   reserved
+}
+
+enum Role {
+  client
+  admin
 }

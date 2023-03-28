@@ -20,23 +20,23 @@ const userService = {
   getAll: async () => {
     return await db.user.findMany();
   },
-  create: async (data) => {
+  create: async (userObj) => {
     try {
       const user = await db.user.create({
-        data: data,
+        data: userObj,
       });
       return user.id;
     } catch (error) {
       throw new Error(error.message);
     }
   },
-  update: async (id, data) => {
+  update: async (id, userObj) => {
     try {
-      const result = await db.user.update({
+      const updated = await db.user.update({
         where: { id: parseInt(id) },
-        data: data,
+        data: userObj,
       });
-      return result;
+      return updated;
     } catch (error) {
       console.log(error.message);
       throw new Error(error.message);
