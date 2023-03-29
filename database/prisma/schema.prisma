@@ -16,7 +16,7 @@ model User {
   phone             String        @unique
   birthday          String
   password          String
-  role              Role          @default(client)
+  role              Role          @default(USER)
   Order             Order[]
   Transactions      Transaction[]
 }
@@ -33,31 +33,34 @@ model Ticket {
 }
 
 model Order {
-  id                Int           @id @default(autoincrement())
-  Ticket            Ticket        @relation(fields: [ticket_id], references: [id])
+  id                Int         @id @default(autoincrement())
+  Ticket            Ticket      @relation(fields: [ticket_id], references: [id])
   ticket_id         Int
-  User              User          @relation(fields: [user_id], references: [id])
+  User              User        @relation(fields: [user_id], references: [id])
   user_id           Int
+  transacton        Transaction @relation(fields: [transaction_id], references: [id])
+  transaction_id    Int         @unique
   count             Int
   total_price       Float
   status            Status
-  registration_date DateTime      @default(now())
+  registration_date DateTime    @default(now())
 }
 
 model Transaction {
-  id      Int     @id @default(autoincrement())
-  User    User    @relation(fields: [user_id], references: [id])
+  id      Int    @id @default(autoincrement())
+  User    User   @relation(fields: [user_id], references: [id])
   user_id Int
-  amount  Float   @default(0)
+  amount  Float  @default(0)
+  Order   Order?
 }
 
 enum Status {
-  paid
-  canceled
-  reserved
+  PAID
+  CANCELED
+  RESERVED
 }
 
 enum Role {
-  client
-  admin
+  USER
+  ADMIN
 }

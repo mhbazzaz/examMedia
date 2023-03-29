@@ -1,6 +1,6 @@
 const userService = require("./user.service");
 
-const userControl = {
+const userController = {
   async getUser(req, res) {
     try {
       const { id } = req.params;
@@ -72,7 +72,42 @@ const userControl = {
       });
     }
   },
+  async getUserWallet(req, res) {
+    try {
+      const { id } = req.params;
+      const wallet = await userService.getWalletBalance(id);
+      res.status(200).json(wallet);
+    } catch (error) {
+      res.status(403).json({
+        error: true,
+        message: error.message,
+      });
+    }
+  },
+  async increaseWalletBalance(req, res) {
+    try {
+      const { user_id, amount } = req.body;
+      const wallet = await userService.increaseWallet({ user_id, amount });
+      res.status(200).json(wallet);
+    } catch (error) {
+      res.status(403).json({
+        error: true,
+        message: error.message,
+      });
+    }
+  },
+  async getAllUserOrders(req, res) {
+    try {
+      const { id } = req.params;
+      const orders = await userService.getAllUserOrders(id);
+      res.status(200).json(orders);
+    } catch (error) {
+      res.status(403).json({
+        error: true,
+        message: error.message,
+      });
+    }
+  },
 };
 
-
-module.exports = userControl;
+module.exports = userController;

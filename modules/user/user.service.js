@@ -1,24 +1,41 @@
 const db = require("../../db");
+const { transactions } = require("../transaction");
+const { orders } = require("../order");
 
 const userService = {
-  
   getUserByPhoneNumber: async (phone) => {
-    return await db.user.findUnique({
-      where: {
-        phone,
-      },
-    });
+    try {
+      return await db.user.findUnique({
+        where: {
+          phone,
+        },
+      });
+    } catch (error) {
+      throw new Error(error.message);
+
+    }
   },
   getUserById: async (id) => {
-    return await db.user.findUnique({
-      where: {
-        id,
-      },
-    });
+    try {
+      return await db.user.findUnique({
+        where: {
+          id,
+        },
+      });
+    } catch (error) {
+      throw new Error(error.message);
+
+    }
   },
-  
+
   getAll: async () => {
-    return await db.user.findMany();
+    try {
+      return await db.user.findMany();
+
+    } catch (error) {
+      throw new Error(error.message);
+
+    }
   },
   create: async (userObj) => {
     try {
@@ -49,6 +66,32 @@ const userService = {
           id: parseInt(id),
         },
       });
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  },
+
+  increaseWallet: async (data) => {
+    try {
+      return await db.transaction.create({
+        data: data,
+      });
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  },
+  getWalletBalance: async (id) => {
+    try {
+      const userBalance = await transactions.getWalletBalance(id);
+      return userBalance;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  },
+  getAllUserOrders: async (id) => {
+    try {
+      const userOrders = await orders.getOrderByUserId(id);
+      return userOrders;
     } catch (error) {
       throw new Error(error.message);
     }

@@ -4,12 +4,16 @@ const { exclude } = require("../../utils/prisma.util");
 
 const orderService = {
   getOrderById: async (orderId) => {
-    const order = await db.order.findUnique({
-      where: {
-        id: parseInt(orderId),
-      },
-    });
-    return order;
+    try {
+      const order = await db.order.findUnique({
+        where: {
+          id: parseInt(orderId),
+        },
+      });
+      return order;
+    } catch (error) {
+      throw new Error(error.message);
+    }
   },
   createOrder: async (orderData) => {
     try {
@@ -36,6 +40,18 @@ const orderService = {
       ]);
 
       return exclude(order, ["userId"]);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  },
+  getOrderByUserId: async (id) => {
+    try {
+      const orders = await db.order.findMany({
+        where: {
+          user_id: parseInt(id),
+        },
+      });
+      return orders;
     } catch (error) {
       throw new Error(error.message);
     }
