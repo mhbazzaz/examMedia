@@ -4,9 +4,9 @@ const orderRouter = require("./ticket.route");
 
 
 function router(app) {
-  app.use("/api/user", userRouter);
-  app.use("/api/order", orderRouter);
-  app.use("/api/ticket", ticketRouter);
+  app.use("/api/v1/user", userRouter);
+  app.use("/api/v1/order", orderRouter);
+  app.use("/api/v1/ticket", ticketRouter);
 }
 
 

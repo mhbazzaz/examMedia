@@ -6,12 +6,12 @@ const { userValidator } = require("../validators");
 const { tokenAuthentication } = require("../middlewares/auth");
 const router = express.Router();
 
-router.post("/api/tikect", ticketController.newTicket);
-router.patch("/api/ticket/:id", ticketController.updated);
-router.delete("/api/v1/ticket/:id", ticketController.delete);
-router.delete("/api/v1/ticket", ticketController.deleteMany);
-router.get("/api/v1/ticket/", ticketController.getAll);
-router.get("/api/v1/ticket/:id", ticketController.getTicket);
+router.post("/", ticketController.newTicket);
+router.patch("/:id", ticketController.updated);
+router.delete("/:id", ticketController.delete);
+router.delete("/", ticketController.deleteMany);
+router.get("/", ticketController.getAll);
+router.get("/:id", ticketController.getTicket);
 // router.post(
 //   "/api/v1/ticket/query?from=&to=&arrival=&departure=",
 //   ticketController

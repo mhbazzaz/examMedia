@@ -6,17 +6,14 @@ const { userController } = require("../modules").userApp;
 // const { tokenAuthentication } = require("../middlewares/auth");
 const router = express.Router();
 
-
-router.post("/api/v1/user", userController.register);
-router.patch("/api/v1/user:id", userController.updated);
-router.delete("/api/v1/user:id", userController.delete);
-router.get("/api/v1/user:id", userController.getUser);
-router.head("/api/v1/user:phone", userController.getUserByPhoneNumber);
-router.get("/api/v1/user/order", userController.getAllUserOrders);
-router.post("/api/v1/user/wallet", userController.increaseWalletBalance);
-router.get("/api/v1/user/wallet", userController.getUserWallet);
-
-
+router.post("/", userController.register);
+router.patch("/:id", userController.updated);
+router.delete("/:id", userController.delete);
+router.get("/:id", userController.getUser);
+router.head("/:phone", userController.getUserByPhoneNumber);
+router.get("/order", userController.getAllUserOrders);
+router.post("/wallet", userController.increaseWalletBalance);
+router.get("/wallet", userController.getUserWallet);
 
 //use validator and auth middleware
 
