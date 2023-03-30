@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { userService } = require("../modules/user");
-const db = require("../database");
+const db = require("../database/db");
 
 exports.tokenAuthentication = async (req, res, next) => {
   const { authorization } = req.headers;

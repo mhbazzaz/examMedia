@@ -1,4 +1,4 @@
-const db = require("./database");
+const db = require("./database/db");
 const ExpressLoader = require("./loaders/expressLoader");
 require("dotenv").config()
 
@@ -14,8 +14,8 @@ async function connectionCheck() {
       const app = new ExpressLoader();
       app.run();
     })
-    .catch(async (e) => {
-      console.error(e);
+    .catch(async (error) => {
+      console.error(error);
       await db.$disconnect();
     });
 })();

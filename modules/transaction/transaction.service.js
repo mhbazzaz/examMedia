@@ -1,4 +1,4 @@
-const db = require("../../database");
+const db = require("../../database/db");
 
 const transactionService = {
   create: async (obj) => {

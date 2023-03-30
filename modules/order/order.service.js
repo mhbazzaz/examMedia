@@ -1,5 +1,4 @@
-const { order } = require("../../database");
-const db = require("../../database");
+const db = require("../../database/db");
 const { exclude } = require("../../utils/prisma.util");
 
 const orderService = {

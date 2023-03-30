@@ -1,4 +1,4 @@
-const db = require("../../database");
+const db = require("../../database/db");
 const { transactions } = require("../transaction");
 const { orders } = require("../order");
 
