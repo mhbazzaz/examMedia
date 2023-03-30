@@ -1,6 +1,39 @@
 const userService = require("./user.service");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
 
 const userController = {
+  async login(req, res, next) {
+    try {
+      const { phone, password } = req.body;
+      const user = await userService.getUserByPhoneNumber(phone);
+
+      if (!user) {
+        return res.status(403).json({
+          message: "Invalid ceridential",
+        });
+      }
+      const validPassword = await bcrypt.compare(password, user.password);
+
+      if (!validPassword) {
+        return res.status(403).json({
+          message: "Invalid ceridential",
+        });
+      }
+
+      const token = jwt.sign({ phone: user.phone }, process.env.SECRET_KEY, {
+        expiresIn: parseInt(process.env.TOKEN_EXPIRE_TIME),
+      });
+
+      return res.json({
+        access_token: token,
+      });
+    } catch (error) {
+      console.log(error.message);
+      next(error);
+    }
+  },
   async getUser(req, res) {
     try {
       const { id } = req.params;
@@ -39,13 +72,17 @@ const userController = {
 
   async register(req, res) {
     try {
-      const user = await userService.create(req.body);
-      return res.status(201).json(user);
-    } catch (error) {
-      res.status(403).json({
-        error: true,
-        message: error.message,
+      const { password } = req.body;
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      const newUser = await userService.create({
+        ...req.body,
+        password: hashedPassword,
       });
+      res.status(201).send("Registered!");
+    } catch (error) {
+      console.log(error.message);
+      next(error);
     }
   },
   async updated(req, res) {

@@ -62,11 +62,11 @@ const ticketController = {
   },
   async deleteMany(req, res) {
     try {
-      const { id } = req.body;
-      for (const elm in id) {
-        const deleted = await ticketService.delete(parseInt(elm));
-        res.status(205).json(deleted);
+      const { ids } = req.body;
+      for (const id in ids) {
+        const deleted = await ticketService.delete(parseInt(id));
       }
+      res.status(205).json("Deleted task was complete!");
     } catch (error) {
       res.status(400).json({
         error: true,

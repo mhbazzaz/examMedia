@@ -1,5 +1,5 @@
-const { order } = require("../../db");
-const db = require("../../db");
+const { order } = require("../../database");
+const db = require("../../database");
 const { exclude } = require("../../utils/prisma.util");
 
 const orderService = {
@@ -32,11 +32,10 @@ const orderService = {
             id: ticketId,
           },
           data: {
-            count: {
-              decrement: order.count,
-            },
+            count: parseInt(count) - 1,
           },
         }),
+        // and we should calculate the price , and change wallet balance and check wallet balance for payment
       ]);
 
       return exclude(order, ["userId"]);
@@ -74,9 +73,9 @@ const orderService = {
         where: {
           id: parseInt(id),
         },
-        status: status.canceled,
+        status: status.CANCELED,
       });
-      return canceled;
+      return res.json("The order was canceled!");
     } catch (error) {
       console.log(error.message);
       throw new Error(error.message);
@@ -88,7 +87,7 @@ const orderService = {
         where: {
           id: parseInt(id),
         },
-        status: status.paid,
+        status: status.PAID,
       });
       return result;
     } catch (error) {

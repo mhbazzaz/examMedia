@@ -1,5 +1,7 @@
-const db = require("./db");
+const db = require("./database");
 const ExpressLoader = require("./loaders/expressLoader");
+require("dotenv").config()
+
 
 async function connectionCheck() {
   await db.$connect();

@@ -1,17 +1,24 @@
-const db = require("../../db");
+const db = require("../../database");
 
 const ticketService = {
-  
   getTicketById: async (id) => {
-    return await db.ticket.findUnique({
-      where: {
-        id,
-      },
-    });
+    try {
+      return await db.ticket.findUnique({
+        where: {
+          id,
+        },
+      });
+    } catch (error) {
+      throw new Error(error.message);
+    }
   },
-  
+
   getAll: async () => {
-    return await db.ticket.findMany();
+    try {
+      return await db.ticket.findMany();
+    } catch (error) {
+      throw new Error(error.message);
+    }
   },
 
   create: async (ticketObj) => {
@@ -47,7 +54,7 @@ const ticketService = {
       throw new Error(error.message);
     }
   },
-  
+
   //create query
   //get ticket by query
 };

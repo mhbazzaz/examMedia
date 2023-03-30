@@ -1,6 +1,7 @@
-const db = require("../../db");
+const db = require("../../database");
 const { transactions } = require("../transaction");
 const { orders } = require("../order");
+
 
 const userService = {
   getUserByPhoneNumber: async (phone) => {

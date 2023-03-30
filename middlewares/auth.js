@@ -1,13 +1,13 @@
 const jwt = require("jsonwebtoken");
 const { userService } = require("../modules/user");
-const db = require("../db");
+const db = require("../database");
 
 exports.tokenAuthentication = async (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization) {
     return res.status(403).json({
-      errorMessage: "token dar header ejbarie!",
+      errorMessage: "You should get access token!",
     });
   }
 
@@ -16,15 +16,14 @@ exports.tokenAuthentication = async (req, res, next) => {
     : authorization;
 
   try {
-    const { username } = jwt.verify(token, process.env.SECRET_KEY);
+    const { phone } = jwt.verify(token, process.env.SECRET_KEY);
 
-    const user = await userService.getByUsername(username);
+    const user = await userService.getUserByPhoneNumber(phone);
     req.user = user;
     next();
   } catch (error) {
-    console.log("error token");
     return res.status(403).json({
-      errorMessage: "invalod Token",
+      errorMessage: "Invalid Token!",
     });
   }
 };
