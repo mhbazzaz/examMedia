@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 
 const userController = {
-  async login(req, res, next) {
+  async login(req , res) {
     try {
       const { phone, password } = req.body;
       const user = await userService.getUserByPhoneNumber(phone);
@@ -30,8 +30,10 @@ const userController = {
         access_token: token,
       });
     } catch (error) {
-      console.log(error.message);
-      next(error);
+      res.status(403).json({
+        error: true,
+        message: error.message,
+      });
     }
   },
   async getUser(req, res) {

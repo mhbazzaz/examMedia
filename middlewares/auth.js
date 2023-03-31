@@ -31,7 +31,7 @@ exports.tokenAuthentication = async (req, res, next) => {
 exports.adminCheck = async (req, res, next) => {
   if (!req.user) {
     throw new Error(
-      "in middleware hatman bayad bad az tokenAuthentication biad!"
+      "You're not authorized as Admin!"
     );
   }
 };

@@ -1,4 +1,4 @@
-const db = require("../../database/db");
+const { db , Status} = require("../../database/db");
 const { exclude } = require("../../utils/prisma.util");
 
 const orderService = {
@@ -16,14 +16,15 @@ const orderService = {
   },
   createOrder: async (orderData) => {
     try {
-      const { userId, ticketId, status } = orderData;
-
+      const { userId, ticketId, status, count } = orderData;
+      const modifyCount = parseInt(count) - parseInt(orderData.count);
       const [order, _] = await db.$transaction([
         db.order.create({
           data: {
             userId,
             ticketId,
-            status,
+            status: Status.RESERVED,
+            count,
           },
         }),
         db.ticket.update({
@@ -31,13 +32,13 @@ const orderService = {
             id: ticketId,
           },
           data: {
-            count: parseInt(count) - 1,
+            count: modifyCount,
           },
         }),
         // and we should calculate the price , and change wallet balance and check wallet balance for payment
       ]);
 
-      return exclude(order, ["userId"]);
+      return exclude(order, ["userId" , "ticketId"]);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -66,28 +67,30 @@ const orderService = {
       throw new Error(error.message);
     }
   },
-  cancel: async (id, status) => {
+  cancel: async (id) => {
     try {
       const canceled = await db.order.update({
         where: {
           id: parseInt(id),
         },
-        status: status.CANCELED,
+        status: Status.CANCELED,
       });
+      //and we should +n the count of ticket
       return res.json("The order was canceled!");
     } catch (error) {
       console.log(error.message);
       throw new Error(error.message);
     }
   },
-  pay: async (id, status) => {
+  pay: async (id) => {
     try {
       const result = await db.order.update({
         where: {
           id: parseInt(id),
         },
-        status: status.PAID,
+        status: Status.PAID,
       });
+      //and decrease user wallet
       return result;
     } catch (error) {
       console.log(error.message);
