@@ -35,12 +35,13 @@ const transactionService = {
   },
   getWalletBallance: async (userId) => {
     try {
-      const userBalance = await db.transaction.aggregate({
-        _sum: {
-          amount: true,
-        },
+      const userBalance = await db.transaction.groupby({
+        by: ["user_id"],
         where: {
           user_id: userId,
+        },
+        _sum: {
+          amount: true,
         },
       });
       return userBalance;
