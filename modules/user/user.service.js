@@ -97,6 +97,41 @@ const userService = {
       throw new Error(error.message);
     }
   },
+  createRefresh: async (data) => {
+    try {
+      const jwtRefresh = await db.RefreshToken.create({
+        data: data,
+      });
+      return jwtRefresh;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  },
+  findRefresh: async (token) => {
+    try {
+      const { id } = token;
+      const refreshToken = await db.RefreshToken.findUnique({
+        where: {
+          id,
+        },
+      });
+      return refreshToken;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  },
+  deleteRefresh: async (tokenId) => {
+    try {
+      const deletedToken = await db.RefreshToken.delete({
+        where: {
+          id: parseInt(tokenId),
+        },
+      });
+      return deletedToken;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  },
 };
 
 module.exports = userService;

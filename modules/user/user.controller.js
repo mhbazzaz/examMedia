@@ -1,14 +1,13 @@
 const userService = require("./user.service");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
+const uuid = require("uuid");
 
 const userController = {
-  async login(req , res) {
+  async login(req, res) {
     try {
       const { phone, password } = req.body;
       const user = await userService.getUserByPhoneNumber(phone);
-
       if (!user) {
         return res.status(403).json({
           message: "Invalid ceridential",
@@ -26,9 +25,26 @@ const userController = {
         expiresIn: parseInt(process.env.TOKEN_EXPIRE_TIME),
       });
 
-      return res.json({
-        access_token: token,
-      });
+      //jwt refresh token
+      const { refreshToken } = req.body;
+
+      if (!refreshToken) {
+        const expiredAt = new Date();
+        expiredAt.setSecond(
+          expiredAt.getSecond() + parseInt(process.env.JWT_REFRESH_EXPIRE_TIME)
+        );
+        const _token = uuid();
+        const userJwt = req.user;
+        const createdToken = await userService.createRefresh({
+          token: _token,
+          expiryDate: expiredAt,
+          user_id: userJwt.id,
+        });
+        res.send({
+          access_token: token,
+          refresh_token: createdToken,
+        });
+      }
     } catch (error) {
       res.status(403).json({
         error: true,
@@ -145,6 +161,44 @@ const userController = {
         error: true,
         message: error.message,
       });
+    }
+  },
+
+  async RefreshJwtToken(req, res) {
+    const { refreshToken: requestToken } = req.body;
+
+    if (requestToken == null) {
+      return res.status(403).json({ message: "Refresh Token is required!" });
+    }
+
+    try {
+      const refreshToken = await userService.findRefresh(token);
+      if (!refreshToken) {
+        res.status(403).json({ message: "Refresh token is not in database!" });
+      }
+
+      if (refreshToken.verifyExpiration(refreshToken)) {
+        const deleted = await userService.deleteRefresh(refreshToken.id);
+        res.status(403).json({
+          message:
+            "Refresh token was expired. Please make a new signin request",
+        });
+      }
+
+      let newAccessToken = jwt.sign(
+        { id: refreshToken.user_id },
+        config.secret,
+        {
+          expiresIn: config.jwtExpiration,
+        }
+      );
+
+      return res.status(200).json({
+        accessToken: newAccessToken,
+        refreshToken: refreshToken.token,
+      });
+    } catch (err) {
+      return res.status(500).send({ message: err });
     }
   },
 };

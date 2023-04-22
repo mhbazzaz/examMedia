@@ -21,7 +21,9 @@ router.post(
   tokenAuthentication,
   userController.increaseWalletBalance
 );
+///route baraye login addi
 router.get("/wallet", tokenAuthentication, userController.getUserWallet);
+router.post("/auth-jwt-refresh", checkError ,userController.login);
 
 
 module.exports = router;
